@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-&xlum%c356x45mr4g5km93!y#wc8wgpjm6s0v6jdb4lx8*osja
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['gus-chess.herokuapp.com', '127.0.0.1']
 
 
 # Application definition
