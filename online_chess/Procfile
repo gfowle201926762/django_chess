@@ -1,0 +1,1 @@
+web: gunicorn fluenco.wsgi --log-file -
