@@ -1,0 +1,138 @@
+{% load static %}
+
+
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'main/style_yeahhhhh.css'%}">
+    <script src="{% static 'main/profilee.js'%}" defer type="module"></script>
+  </head>
+
+
+  <body>
+
+    <div class='nav_container'>
+      <a method='POST' href="{%url 'home'%}" class='nav_top_button nav_button'>Play!</a>
+
+      {%if logged_in == True%}
+      <a method='GET' href="{%url 'profile' request.user.profile.pk%}" class='nav_button'>Profile
+        <p class='hidden' id='notification_count'>{{count}}</p>
+      </a>
+      {%endif%}
+
+      <a id='search_button' href="{%url 'profile_search'%}" class='nav_button'>Search</a>
+
+      {%if logged_in == True%}
+      <form method='POST' action="{%url 'logout'%}" class='nav_button'>
+        {%csrf_token%}
+        <button type="submit">Logout</button>
+      </form>
+      {%else%}
+      <a href="{%url 'login'%}" class='nav_button'>Login</a>
+      {%endif%}
+
+    </div>
+
+    <div id="board_wrapper" class="board_wrapper">
+        <div class='profile_wrapper'>
+            <div class='header_wrapper'>
+                <p class='profile' >{{profile.name}}</p>
+                <div class='profile_link_wrapper'>
+
+                {%if logged_in == True%}
+                <form method='POST' action="{%url 'send_challenge' profile.pk request.user.profile.pk%}">
+                    {%csrf_token%}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <input type="hidden" name="query" value="{{ request.GET.query }}">
+                    <button id='challenge_button' type='submit' class='follow_button'>
+                    {%if request.user != profile.user%}
+                        {%if is_challenging == False%}
+                            Challenge
+                        {%else%}
+                            Cancel
+                        {%endif%}
+                    {%endif%}
+                    </button>
+                </form>
+
+                <form method='POST' action="{% url 'profile_follow' profile.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                    <input type="hidden" name="query" value="{{ request.GET.query }}">
+                    <button type='submit' class='follow_button'>
+                        {%if request.user != profile.user%}
+                            {%if is_following == False%}
+                                follow
+                            {%else%}
+                                unfollow
+                            {%endif%}
+                        {%endif%}
+                    </button>
+                </form>
+
+                {%else%}
+                <a class='follow_button' href="{%url 'register'%}">Challenge</a>
+                <a class='follow_button' href="{%url 'register'%}">Follow</a>
+                {%endif%}
+
+                
+                
+                </div>
+            </div>
+            <div class='profile_info_wrapper'>
+                <div class='friends_wrapper'>
+                    <p class='friend_title'>Friends</p>
+                    <div class='friends_container'>
+                        {%for friend in friend_list%}
+                            <a class='friend' href="{%url 'profile' friend.profile.pk%}">{{friend.profile.name}}</a>
+                        {%endfor%}
+                    </div>
+                </div>
+                <div class='friends_wrapper'>
+                    <p class='friend_title'>Challenges</p>
+                    <div class='friends_container'>
+                        {%for friend in challengers_list%}
+                        <div class='challenge_info_wrapper'>
+                            <a class='friend' href="{%url 'profile' friend.profile.pk%}">{{friend.profile.name}}</a>
+                            <div class='challenge_choice_wrapper'>
+                                <form method='POST' action="{%url 'accept_challenge' friend.profile.pk 'accept'%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <input type="hidden" name="query" value="{{ request.GET.query }}">
+                                    <button type='submit'>Accept</button>
+                                </form>
+
+                                <form method='POST' action="{%url 'accept_challenge' friend.profile.pk 'reject'%}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="next" value="{{ request.path }}">
+                                    <input type="hidden" name="query" value="{{ request.GET.query }}">
+                                    <button id='reject_button' name={{friend.profile.pk}} type='submit'>Reject</button>
+                                </form>
+
+
+                            </div>
+                        </div>
+                        {%endfor%}
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    {{request.user.profile.pk|json_script:'self_profile_pk'}}
+    {{count|json_script:'count'}}
+    
+  </body>
+
+  <script>
+    
+  </script>
+
+   
+</html>
