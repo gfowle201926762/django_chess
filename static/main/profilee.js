@@ -1,7 +1,7 @@
 console.log("PROFILE")
 
 
-const url = 'ws://' + window.location.host + '/ws/notifications/'
+const url = 'wss://' + window.location.host + '/ws/notifications/'
 const notification_socket = new WebSocket(url)
 
 const self_profile_pk = JSON.parse(document.getElementById('self_profile_pk').textContent)
@@ -34,8 +34,3 @@ notification_socket.onmessage = function(event){
         notification_count.classList.add('notification_count')
     }
 }
-
-
-
-
-

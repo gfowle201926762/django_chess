@@ -36,7 +36,7 @@ please_wait()
 
 
 
-const notification_url = 'ws://' + window.location.host + '/ws/notifications/'
+const notification_url = 'wss://' + window.location.host + '/ws/notifications/'
 const notification_socket = new WebSocket(notification_url)
 
 const self_profile_pk = 'dummy'
@@ -98,7 +98,7 @@ var opponent_type = 'human'
 
 
 
- 
+
 const chess_room_name = JSON.parse(document.getElementById('chess-room-name').textContent)
 
 var async_socket = '/ws/chess_room/'
@@ -113,7 +113,7 @@ if (chess_room_name.length > 9){
 
 
 
-const url = 'ws://' + window.location.host + async_socket + chess_room_name + '/'
+const url = 'wss://' + window.location.host + async_socket + chess_room_name + '/'
 const chess_room_socket = new WebSocket(url)
 
 chess_room_socket.onclose = function(event){
@@ -145,7 +145,7 @@ chess_room_socket.onmessage = function(event){
             message = reorientation(message)
 
             computer_turn('receiving', message)
-        }        
+        }
     }
 
 
@@ -154,7 +154,7 @@ chess_room_socket.onmessage = function(event){
         if (please_wait != null){
             please_wait.remove()
         }
-        
+
         rematch = false
 
         //send your alias
@@ -178,7 +178,7 @@ chess_room_socket.onmessage = function(event){
             white_player = 'human'
             //white_player = data.opponent_type
         }
-        
+
 
     }
 
@@ -220,7 +220,7 @@ chess_room_socket.onmessage = function(event){
         game_board.sequence = data.message
         game_board.no_of_plys = game_board.sequence.length / 7
         game_board.reload_sequence()
-        
+
         last_clicked_id = null
         end_game = data.end_game
         previoustime = 0
@@ -260,7 +260,7 @@ chess_room_socket.onmessage = function(event){
             'type': 'update_own_alias',
             'message': own_alias
         }))
-        
+
     }
 
     if (data.type == 'rejected_play'){
@@ -272,9 +272,9 @@ chess_room_socket.onmessage = function(event){
         result = data.message
         end_game = true
         game_finished(result, true)
-        
+
     }
-    
+
 }
 
 
@@ -300,7 +300,7 @@ function handle_rematch(event){
         handle_close_end_screen()
         please_wait()
     }
-    
+
 }
 
 function reorientation(message){
@@ -319,7 +319,7 @@ function reorientation(message){
 
     return message
 }
- 
+
 function send_move(message){
     if (opponent_type == 'computer'){
         var new_color = 'white'
@@ -337,7 +337,7 @@ function send_move(message){
         for(let i=0; i<game_board.sequence[1].length / 2; i++){
             var piece_information = game_board.sequence[1].slice(((i * 2) + 1), ((i * 2) + 2))
             dead_pieces = dead_pieces.concat(piece_information)
-        } 
+        }
 
         var ppm = null
         if (previous_piece_moved != null){
@@ -366,7 +366,7 @@ function send_move(message){
             'message': message
         }))
     }
-    
+
 }
 
 function send_sequence(sequence){
@@ -409,7 +409,7 @@ function handle_end_arrow(){
         game_board.change_move(0)
         arrows()
     }
-    
+
 }
 
 function handle_back_arrow(){
@@ -460,9 +460,9 @@ function handle_close_option_screen(){
     if (drop_down){
         drop_down.remove()
     }
-    
+
     menu_down = false
-} 
+}
 
 function handle_menu(event){
 
@@ -507,7 +507,7 @@ function handle_menu(event){
         if (end_game == true){
             abort_button.innerHTML = 'New game'
         }
-        
+
         button_container.appendChild(abort_button)
         abort_button.addEventListener('click', handle_abort_game, {once: true})
 
@@ -527,16 +527,16 @@ function handle_menu(event){
         menu_down = true
     }
 
-    
 
-    
+
+
 }
 
 function handle_flip(){
     if (end_game == false){
         game_board.flip_board()
     }
-    
+
 }
 
 function handle_play_again(event){
@@ -587,7 +587,7 @@ function game_finished(result, disallowed){
             end_screen.appendChild(rematch)
             rematch.addEventListener('click', handle_rematch, {once: true})
         }
-        
+
 
         const play_again = document.createElement('div')
         play_again.innerHTML = "Back to lobby"
@@ -597,7 +597,7 @@ function game_finished(result, disallowed){
         end_screen.appendChild(play_again)
     }
 
-    
+
 }
 
 function computer_turn(computer_type, moves){
@@ -645,7 +645,7 @@ function computer_turn(computer_type, moves){
     }
 
     previous_piece_moved = move[0]
-    
+
     game_board.draw_taken_pieces()
     if (turn == 'white'){
         turn = 'black'
@@ -701,7 +701,7 @@ function handleloop(currentTime){
         check_game_finished(moves, in_check)
 
         if (end_game == false && menu_down == false && navigating == false && pause == false){
-            
+
             computer_turn(computer_type, moves)
         }
 
@@ -717,7 +717,7 @@ function handleloop(currentTime){
 function handleclick(event){
     const piece = event.target
     if ((turn == channel_player.color) && end_game == false){
-        
+
         if (turn == 'white'){
             var own_pieces = white_pieces
             var opp_pieces = black_pieces
@@ -765,7 +765,7 @@ function handleclick(event){
                                 if (in_check == false){
 
                                     var increment = 0
-                                    
+
                                     if (game_board.orientation == 'black'){
                                         increment = -1
                                     }
@@ -774,12 +774,12 @@ function handleclick(event){
 
                                         if (castle.identifier == last_clicked_id){
                                             castle_piece = castle
-                                            
+
                                             if (own_piece.first_turn == false || castle.first_turn == false){
                                                 blocked = true
                                             }
 
-                                            
+
                                             if (castle.x == 0){
                                                 opp_pieces.forEach(opp_piece => {
                                                     if (opp_piece.alive == true){
@@ -789,12 +789,12 @@ function handleclick(event){
                                                             blocked = true
                                                         }
                                                     }
-                                                    
+
                                                 })
-                                                
+
                                             }
                                             if (castle.x == 7){
-                                                
+
                                                 opp_pieces.forEach(opp_piece => {
                                                     if (opp_piece.alive == true){
                                                         game_board.clear_array()
@@ -803,11 +803,11 @@ function handleclick(event){
                                                             blocked = true
                                                         }
                                                     }
-                                                    
+
                                                 })
-                                                
+
                                             }
-                                            
+
                                         }
                                     })
 
@@ -825,8 +825,8 @@ function handleclick(event){
                                         }
                                         castle_piece.first_turn = false
                                         own_piece.first_turn = false
-                                        
-                                        
+
+
                                         game_board.remove_options()
                                         game_board.remove_traking_squares()
                                         game_board.clear_array()
@@ -834,7 +834,7 @@ function handleclick(event){
                                         game_board.update_sequence(4 + increment, own_piece.y, own_piece.x, own_piece.y, false)
                                         last_clicked_id = null
                                         previous_piece_moved = own_piece
-                                        
+
                                         message = [castle_piece.identifier, castle_piece.y, castle_piece.x, own_piece.identifier, own_piece.x, own_piece.y]
                                         send_move(message)
                                         send_sequence(game_board.sequence)
@@ -850,11 +850,11 @@ function handleclick(event){
                                     }
                                     game_board.clear_array() // is this necessary?
 
-                                    
+
 
                                     if (((turn == 'white' && white_player == 'computer') || (turn == 'black' && black_player == 'computer')) && end_game == false && blocked == false){
                                         computer_turn(computer_type, moves)
-                                        
+
                                         var moves = get_legal_moves(turn, previous_piece_moved)
                                         var in_check = check_for_check(turn, previous_piece_moved)
                                         check_game_finished(moves, in_check)
@@ -875,7 +875,7 @@ function handleclick(event){
                                     // simulate all the moves defined in the array, and check if they are legal.
                                     last_clicked_id = piece.id
                                 }
-                                
+
                             }
 
                             else{
@@ -928,13 +928,13 @@ function handleclick(event){
                                 game_board.draw_pieces(original_x, original_y, taken_x, taken_y, true)
                                 game_board.update_sequence(original_x, original_y, taken_x, taken_y, true)
                                 game_board.draw_taken_pieces()
-                                
+
                                 last_clicked_id = null
 
                                 //send to the websocket
                                 send_move(message)
                                 send_sequence(game_board.sequence)
-                                
+
                                 turn = next_turn
 
                                 //console.log("\n\n")
@@ -950,9 +950,9 @@ function handleclick(event){
                                 }
 
                                 else if (((turn == 'white' && white_player == 'computer') || (turn == 'black' && black_player == 'computer')) && end_game == false){
-                                    
+
                                     computer_turn(computer_type, moves)
-                                        
+
                                     var moves = get_legal_moves(turn, previous_piece_moved)
                                     var in_check = check_for_check(turn, previous_piece_moved)
                                     check_game_finished(moves, in_check)
@@ -961,21 +961,21 @@ function handleclick(event){
                                         game_finished(result)
                                     }
                                 }
-                                
+
                             }
                         })
 
-                        
+
                     }
 
-                    
+
 
                     else{
                         game_board.remove_options()
                         game_board.clear_array()
                         last_clicked_id = null
                     }
-                } 
+                }
             }
 
             else if (piece.classList.contains('optional')){
@@ -1009,14 +1009,14 @@ function handleclick(event){
                 var moves = get_legal_moves(turn, previous_piece_moved)
                 var in_check = check_for_check(turn, previous_piece_moved)
                 check_game_finished(moves, in_check)
-                
+
 
                 //send to the websocket
                 send_move(message)
                 send_sequence(game_board.sequence)
-                
 
-                
+
+
 
                 if (end_game == true){
                     game_finished(result)
@@ -1068,7 +1068,7 @@ function handleclick(event){
 
                 if ((turn == "black" && game_board.orientation == 'white') || (turn == 'white' && game_board.orientation == 'black')){
                     var i = -1
-                }  
+                }
 
                 var col = piece.style.gridColumnStart - 1
                 var row = piece.style.gridRowStart - 1 // the taken piece is + 1 (if going up); the taken piece is -1 (if going down)
@@ -1082,7 +1082,7 @@ function handleclick(event){
                         message = [original_piece.identifier, original_piece.y, original_piece.x, opp_piece.identifier, original_x, original_y]
                     }
                 })
-                
+
                 game_board.remove_options()
                 game_board.remove_traking_squares()
                 game_board.clear_array()
@@ -1093,10 +1093,10 @@ function handleclick(event){
                 //send to the websocket
                 send_move(message)
                 send_sequence(game_board.sequence)
-                
-                
+
+
                 last_clicked_id = null
-                
+
                 turn = next_turn
 
                 var moves = get_legal_moves(turn, previous_piece_moved)
@@ -1120,7 +1120,7 @@ function handleclick(event){
                         game_finished(result)
                     }
                 }
-                
+
             }
 
             else{
@@ -1131,7 +1131,7 @@ function handleclick(event){
             }
         }
     }
-    
+
 }
 
 function initialise(refresh){
@@ -1141,7 +1141,7 @@ function initialise(refresh){
         game_board.remove_elements()
         game_board.remove_traking_squares()
         game_board.remove_taken_pieces()
-        
+
         //white_player = null
         //black_player = null
 
@@ -1150,12 +1150,12 @@ function initialise(refresh){
         game_board.no_of_plys = 0
         game_board.move = 0
     }
-    
-    
+
+
 
     if (document.getElementById('top_take_board') == null){
         const board_wrapper = document.getElementById('board_wrapper')
-        
+
         // create top and bottom board wrapper
         const top_board_wrapper = document.createElement('div')
         top_board_wrapper.classList.add('above_below_board_wrapper')
@@ -1232,9 +1232,9 @@ function initialise(refresh){
         bottom_board_wrapper.appendChild(end_arrow)
         end_arrow.addEventListener('click', handle_end_arrow)
 
-        
 
-        
+
+
 
         // create buttons to go in the side menu (settings and flip board) -- and a container to orgaise them horizontally
         const menu_collection = document.createElement('div')
@@ -1254,13 +1254,13 @@ function initialise(refresh){
         flip_button.src = '/static/main/images/buttons/flip_button.png'
         menu_collection.appendChild(flip_button)
         flip_button.addEventListener('click', handle_flip)
-        
+
     }
 
 }
 
 function start_game(refresh, test){
-    
+
     const screen = document.getElementById('end_screen')
     if (screen){
         screen.remove()
@@ -1274,13 +1274,13 @@ function start_game(refresh, test){
             if (test == false){
                 piece.reset()
             }
-            
+
             if (game_board.orientation == 'black'){
                 piece.flip()
             }
         })
     }
-    
+
 
     game_board.clear_array()
     game_board.draw_pieces()
@@ -1298,8 +1298,8 @@ function start_game(refresh, test){
         send_sequence(game_board.sequence)
         turn = 'white'
     }
-    
-    
+
+
 
     if (turn == 'white' && white_player == 'computer' && black_player == 'human'){
         var moves = get_legal_moves(turn, previous_piece_moved)
@@ -1314,7 +1314,7 @@ function start_game(refresh, test){
         }
 
     }
-    
+
     if (white_player == 'computer' && black_player == 'computer'){
         window.requestAnimationFrame(handleloop)
     }
@@ -1326,5 +1326,3 @@ function start_game(refresh, test){
 
 
 document.addEventListener('click', handleclick)
-
-

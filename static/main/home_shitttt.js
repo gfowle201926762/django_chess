@@ -1,7 +1,7 @@
 
 
 
-const notification_url = 'ws://' + window.location.host + '/ws/notifications/'
+const notification_url = 'wss://' + window.location.host + '/ws/notifications/'
 const notification_socket = new WebSocket(notification_url)
 
 const self_profile_pk = JSON.parse(document.getElementById('self_profile_pk').textContent)
@@ -110,8 +110,8 @@ function handle_computer(event){
         new_game.classList.add('reject_play')
         opposition = null
     }
-    
-    
+
+
 }
 
 function handle_human(event){
@@ -133,11 +133,11 @@ function handle_human(event){
         new_game.classList.remove('play_again')
         new_game.classList.add('reject_play')
         opposition = null
-    }   
+    }
 }
 
 function handle_friend_challenge(event){
-    
+
     window.location.pathname = '/search/'
 }
 
@@ -209,7 +209,7 @@ var alias = null
 
 
 // start websocket connection to the lobby
-const url = 'ws://' + window.location.host + '/ws/chess_lobby/'
+const url = 'wss://' + window.location.host + '/ws/chess_lobby/'
 const lobby_socket = new WebSocket(url)
 
 
@@ -240,9 +240,3 @@ lobby_socket.onmessage = function(event){
         window.location.pathname = '/game/' + message + '/'
     }
 }
-
-
-
-
-
-
