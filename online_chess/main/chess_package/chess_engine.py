@@ -49,10 +49,10 @@ class Engine():
             self.opp_pieces = white_pieces
 
     def show_legal_moves(self):
-        print("\nLEGAL MOVES:")
+        #print("\nLEGAL MOVES:")
         for i in range(0, int(len(self.moves) / 4)):
             print(self.moves[(i * 4)], self.moves[(i * 4) + 1], self.moves[(i * 4) + 2], self.moves[(i * 4) + 3])
-        print("\n")
+        #print("\n")
 
     def clear_array(self):
         board.array = numpy.zeros((8, 8))
@@ -104,8 +104,8 @@ class Engine():
 
         self.clear_array()
 
-        print("\n\n***************\nNEW MOVE\n******************\n")
-        print(f"\n{board.array}\n")
+        #print("\n\n***************\nNEW MOVE\n******************\n")
+        #print(f"\n{board.array}\n")
 
     def check_for_check(self, player, previous_piece_moved):
 
@@ -127,7 +127,7 @@ class Engine():
                 piece.move(previous_piece_moved)
                 if board.array[king.y][king.x] == check_value:
                     in_check = True
-        
+
         return in_check
 
     def get_legal_moves(self, player, previous_piece_moved):
@@ -227,12 +227,12 @@ class Engine():
         x = random.randint(0, no_moves - 1)
 
         move = [moves[(x * 4)], moves[(x * 4) + 1], moves[(x * 4) + 2], moves[(x * 4) + 3]]
-        
+
         # NOT CASTLING: 1. piece being moved, 2. target row, 3. target col, 4. taken piece
         # CASTLING: 1. castle, target row for castle, target col for castle, king
 
         return move
-    
+
     def generate_ordered_move(self, moves, number):
         if number >= len(moves) / 4:
             return False
@@ -248,13 +248,13 @@ class Engine():
         taken_identifier = None
 
         #if board.array[move[1]][move[2]] != 0: #taking a piece:
-        print(f"MOVE[3]: {move[3]}")
+        #print(f"MOVE[3]: {move[3]}")
         if move[3] != None:
             for opp_piece in all_pieces:
                 if opp_piece.alive == True and opp_piece.identifier == move[3].identifier: #board.array[move[1]][move[2]]:
                     opp_piece.alive = False
                     taken_identifier = opp_piece.identifier
-                    print(f"taken_identifier = {opp_piece.identifier}")
+                    #print(f"taken_identifier = {opp_piece.identifier}")
 
         move[0].y = move[1]
         move[0].x = move[2]
@@ -268,10 +268,10 @@ class Engine():
 
 
     def simulate_move(self, move):
-        
+
         if move[3] != None:
             if move[3].identifier == 1 or move[3].identifier == 17:
-                print("CASTLING!")
+                #print("CASTLING!")
                 move[3].first_turn = False
                 if move[0].x == 0:
                     move[3].x = 2
@@ -349,7 +349,7 @@ class Engine():
         if depth == 12:
             self.saved_depth_12['alive_pieces'] = alive_pieces
             self.saved_depth_12['dead_pieces'] = dead_pieces
-        
+
 
     def change_depth(self, depth):
         if depth == 0:
@@ -407,18 +407,18 @@ class Engine():
 
         #print('\n')
         #print(depth, move)
-        
+
         # The move must first get simulated (played for real)
         self.simulate_move(move)
 
         # opponent in check mate?
         moves = self.get_legal_moves(opponent, previous_piece_moved)
         #print(moves)
-        
+
         in_check = self.check_for_check(opponent, previous_piece_moved)
 
         if len(moves) == 0 and in_check == True:
-            print('CHECKMATE DETECTED at top of evaluate')
+            #print('CHECKMATE DETECTED at top of evaluate')
             return [1000, depth] # CHECKMATE!
 
         if len(moves) == 0 and in_check == False:
@@ -429,7 +429,7 @@ class Engine():
 
         # opponent only has a few options?
         if len(moves) / 4 >= 1 and len(moves) / 4 <= self.max_breadth:
-            print("LIMITED OPTIONS")
+            #print("LIMITED OPTIONS")
 
             certain_check_mate = True
             depth += 1
@@ -447,7 +447,7 @@ class Engine():
                 self.save_depth(saved_depth + 1)
                 potential = False
                 for own_i in range(0, int(len(own_moves) / 4)): # loop through all own moves in response - only one needs to work.
-                    
+
                     self.change_depth(saved_depth + 1)
                     self.clear_array()
                     own_move = self.generate_ordered_move(own_moves, own_i)
@@ -458,13 +458,13 @@ class Engine():
                         returned_depth = evaluation[1]
                         if evaluation[0] == 1000:
                             break
-                        
+
                 if potential == False:
                     certain_check_mate = False
 
             if certain_check_mate == True:
-                print(f"\nRETURNING WITH CERTAINTY AT DEPTH {depth}\n")
-                print(f"RETURNING: {1000 - returned_depth}, {returned_depth}")
+                #print(f"\nRETURNING WITH CERTAINTY AT DEPTH {depth}\n")
+                #print(f"RETURNING: {1000 - returned_depth}, {returned_depth}")
                 return [1000 - returned_depth, returned_depth]
 
         return [0, depth]
@@ -494,7 +494,7 @@ class Engine():
                 own_pieces = self.opp_pieces
                 lower_bound = 300
                 upper_bound = 400
-            
+
         # DETECT YOUR OWN PIECES WHICH ARE THREATENED!
         own_threatened_pieces = {}
         specific_threats = []
@@ -578,7 +578,7 @@ class Engine():
                                     break
                         threatened_pieces[first_key][threat_depth][piece_moved] = new_list
 
-                        
+
                         for i in range(0, len(new_list)):
                             if len(new_list) > i + 1:
                                 if new_list[i].ranking == new_list[i + 1].ranking:
@@ -627,7 +627,7 @@ class Engine():
 
 
         # order those pieces of the same ranking at the same depth (and related piece) depending on which allows the lowest subsequent rank:
-        
+
 
         return threatened_pieces
 
@@ -640,7 +640,7 @@ class Engine():
 
     def order_recursive(self, threatened_pieces, new_order, threat_depth, first_key, previous_pieces, t_pieces, count):
         threat_depth += 1
-        
+
         if threat_depth in list(threatened_pieces[first_key].keys()):
             for previous_piece in previous_pieces:
                 if previous_piece in list(threatened_pieces[first_key][threat_depth].keys()):
@@ -670,7 +670,7 @@ class Engine():
                                             #print(f"NEW ORDER: {new_order}")
                                             if competing_piece not in new_order[first_key]:
                                                 if competing_piece != potential_piece:
-                                            
+
                                                     #print('both competing and potential NOT IN new order')
                                                     seen = True
                                                     saved_potential_piece = potential_piece
@@ -679,7 +679,7 @@ class Engine():
                                                     if potential_piece.ranking >= competing_piece.ranking:
                                                         allowed = False
                                                         #print("FALSE!!!!!")
-                                            
+
                     #print(f"allowed: {allowed}, seen: {seen}")
                     if allowed == True and seen == True:
                         #print(f"POTENTIAL PIECE: {saved_potential_piece}")
@@ -710,8 +710,8 @@ class Engine():
                 if i == 0:
                     new_order[first_key] = [piece]
                     #print(f"Appending up here: {piece}")
-                
-                
+
+
                 # check if the next depth at this piece offers lower ranking pieces.
                 #if len(threatened_pieces[first_key][1][None]) > i + 1:
                 if 2 in list(threatened_pieces[first_key].keys()):
@@ -748,8 +748,8 @@ class Engine():
                                     if potential_piece not in new_order[first_key]:
                                         delay = True
                                         saved_potential_piece = potential_piece
-                                        
-                                        
+
+
 
 
                 # check if the appended piece gives way to another lower ranking piece
@@ -802,8 +802,8 @@ class Engine():
 
     def evaluate_supports_and_threats(self, own_threatened_pieces, own_supported_pieces, opp_threatened_pieces, opp_supported_pieces):
         # evaluate the safety of every piece on the board, then add that together.
-        print(f"OWN THREATENED PIECES: {own_threatened_pieces}")
-        print(f"OWN SUPPORTED PIECES: {own_supported_pieces}")
+        #print(f"OWN THREATENED PIECES: {own_threatened_pieces}")
+        #print(f"OWN SUPPORTED PIECES: {own_supported_pieces}")
 
         total_count = []
         for x in range(0, 2):
@@ -833,7 +833,7 @@ class Engine():
 
                     for i in range(0, len(threats)):
                         if len(supports) < i + 1:
-                            print('no possible responses!')
+                            #print('no possible responses!')
                             # there are no possible responses. They can take with no consequences regardless of ranking.
                             response_count -= piece.ranking
                             break
@@ -864,18 +864,18 @@ class Engine():
                         # negative response count is good for opponent; they will probably do it
                         piece_evaluation += response_count
 
-                    print(f"PIECE EVALUATION for {piece}: {piece_evaluation}")
+                    #print(f"PIECE EVALUATION for {piece}: {piece_evaluation}")
 
                     big_count.append(piece_evaluation)
-            
+
             total_count.append(big_count)
 
         defense_score = min(total_count[0])
         attack_score = min(total_count[1]) / 100
-        print(f"\nTOTAL COUNT 0: {total_count[0]}")
-        print(f"TOTAL COUNT 1: {total_count[1]}")
+        #print(f"\nTOTAL COUNT 0: {total_count[0]}")
+        #print(f"TOTAL COUNT 1: {total_count[1]}")
         score = defense_score - attack_score
-        print(f"SCORE: {score}")
+        #print(f"SCORE: {score}")
         return score
 
 
@@ -885,9 +885,9 @@ class Engine():
 
     def evaluate(self, move, previous_piece_moved, depth, player):
 
-        
+
         # 1: See if we can force checkmate
-        print("FORCE CHECKMATE")
+        #print("FORCE CHECKMATE")
         mate_evaluation = self.evaluate_mate(move, previous_piece_moved, depth, player)
         if mate_evaluation[0] >= 1000 - self.max_depth:
             return mate_evaluation
@@ -895,7 +895,7 @@ class Engine():
         self.change_depth(0)
         self.clear_array()
 
-        print("DEFEND CHECKMATE")
+        #print("DEFEND CHECKMATE")
         # 2: Defend against checkmate
         self.simulate_move(move) # simulate our own move
         depth = depth + 4
@@ -908,16 +908,16 @@ class Engine():
             opp_move = self.generate_ordered_move(opp_moves, i)
 
             mate_threat_evaluation = self.evaluate_mate(opp_move, move[0], depth, self.opponent)
-            
+
             if mate_threat_evaluation[0] >= 1000 - self.max_depth:
                 return [-(mate_threat_evaluation[0]), depth]
 
         self.change_depth(0)
         self.clear_array()
-        
+
 
         # 3: Heuristics (ditch legal move function in favour of processing time)
-        print("HEURISTICS")
+        #print("HEURISTICS")
 
         self.simulate_move(move)
         self.clear_array()
@@ -945,15 +945,15 @@ class Engine():
         evaluation = self.evaluate_supports_and_threats(ST_NO, SS_NO, OT_NO, OS_NO)
         score += evaluation
 
-            
 
-                    
+
+
 
 
 
         return [score, depth]
 
-        
+
 
 
     def generate_move(self, type):
@@ -971,7 +971,7 @@ class Engine():
                 self.clear_array()
 
                 move = self.generate_ordered_move(moves, i)
-                print(f'\n\nOWN INITIAL MOVE: {move}')
+                #print(f'\n\nOWN INITIAL MOVE: {move}')
                 evaluation = self.evaluate(move, self.original_previous_piece_moved, 0, self.player)
                 evaluations.append(evaluation[0])
                 if evaluation[0] == 1000:
@@ -980,8 +980,8 @@ class Engine():
             self.clear_array()
             max_eval = max(evaluations)
             indexes = self.get_indexes(evaluations, max_eval)
-            print(f"\n\nMAX_EVAL: {max_eval}")
-            print(f"EVALS: {evaluations}")
+            #print(f"\n\nMAX_EVAL: {max_eval}")
+            #print(f"EVALS: {evaluations}")
 
             best_moves = []
             for index in indexes:
@@ -992,9 +992,9 @@ class Engine():
                 best_moves.append(move[3])
 
             final_move = self.generate_random_legal_move(best_moves)
-            print(f"\nFINAL MOVE: {final_move}")
+            #print(f"\nFINAL MOVE: {final_move}")
             final_move = self.translate_move(final_move)
-            print(f"FINAL MOVE: {final_move}\n")
+            #print(f"FINAL MOVE: {final_move}\n")
             return final_move
 
 
@@ -1002,8 +1002,3 @@ class Engine():
             move = self.generate_random_legal_move(moves)
             move = self.translate_move(move)
             return move
-
-
-
-
-
