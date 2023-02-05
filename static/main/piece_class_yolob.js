@@ -68,7 +68,7 @@ export class piece{
             option.style.gridRowStart = new_y + 1
             option.classList.add('optional')
             board.appendChild(option)
-            
+
         }
     }
 
@@ -93,12 +93,12 @@ export class piece{
     }
 
     updown(){ //castle test: x=2, y=5. (x means how far to the right, y is how far down.) In the array, the first index is the row (therefore relating to the y value).
-        
+
         for (let i=1; i<8; i++){ // up
             if (this.y - i >= 0){
                 if (board_array[this.y - i][this.x] == 0){
                     this.check_array(this.y - i, this.x)
-                    
+
                 }
                 else{
                     this.check_take_array(this.y - i, this.x)
@@ -146,7 +146,7 @@ export class piece{
             }
             else{break}
         }
-        
+
     }
 
     diagonal(){
@@ -202,8 +202,8 @@ export class piece{
 
     move(previous_piece_moved){
 
-        
-        
+
+
         if (this.type == "king"){
             for (let i=-1; i<2; i++){
                 this.check_array(this.y + i, this.x - 1)
@@ -216,7 +216,7 @@ export class piece{
             this.check_take_array(this.y + 1, this.x)
             this.check_take_array(this.y - 1, this.x)
         }
-        
+
 
         if (this.type == "queen"){
             this.diagonal()
@@ -248,7 +248,7 @@ export class piece{
             }
         }
 
-        
+
         if (this.type == "pawn"){
             if ((this.colour == 'white' && this.flipped == false) || (this.colour == 'black' && this.flipped == true)){
                 var i = -1
@@ -257,16 +257,16 @@ export class piece{
             if ((this.colour == "black" && this.flipped == false) || (this.colour == 'white' && this.flipped == true)){
                 var i = 1
                 var p = 1
-            }            
+            }
 
             if (this.x + 1 <= 7){
                 this.check_take_array(this.y + i, this.x + 1)
             }
-            
+
             if (this.x - 1 >= 0){
                 this.check_take_array(this.y + i, this.x - 1)
             }
-            
+
             if (this.first_turn == true){
                 if (board_array[this.y + i][this.x] == 0 && board_array[this.y + (2 * i)][this.x] == 0){
                     this.check_array(this.y + (2 * i), this.x)
@@ -283,7 +283,7 @@ export class piece{
                         // we need to check another piece. The piece at this index, and if it matches the last piece played.
                         //console.log(previous_piece_moved.identifier)
                         if (previous_piece_moved.identifier == board_array[this.y][this.x + 1]){ // the previous piece moved identifier is the same as the board index.
-                            board_array[this.y + i][this.x + 1] = previous_piece_moved.identifier + 100 
+                            board_array[this.y + i][this.x + 1] = previous_piece_moved.identifier + 100
                         }
                     }
                 }
@@ -299,7 +299,7 @@ export class piece{
             }
 
         }
-        
+
 
 
     }
@@ -346,12 +346,12 @@ export class piece{
         else if (this.flipped == false){
             this.flipped = true
         }
-        
+
     }
 }
 
 // PIECE INSTANCES //
-/*
+
 export var white_king = new piece(4, 7, "king", "white", 1, true, true, false, 10)
 export var white_queen = new piece(3, 7, "queen", "white", 2, true, true, false, 9)
 export var white_bishop_1 = new piece(2, 7, "bishop", "white", 3, true, true, false, 3)
@@ -385,7 +385,7 @@ export var black_pawn_5 = new piece(4, 1, "pawn", "black", 29, true, true, false
 export var black_pawn_6 = new piece(5, 1, "pawn", "black", 30, true, true, false, 1)
 export var black_pawn_7 = new piece(6, 1, "pawn", "black", 31, true, true, false, 1)
 export var black_pawn_8 = new piece(7, 1, "pawn", "black", 32, true, true, false, 1)
-*/
+
 
 
 // TESTING INSTANCES //
@@ -430,7 +430,7 @@ export var black_pawn_8 = new piece(7, 1, "pawn", "black", 32, true, true, false
 //simple testing case more flavour, white human to move one go, then test black.
 //not recognised in the order!
 //I really CBA do this any more...
-
+/*
 export var white_king = new piece(4, 7, "king", "white", 1, true, true, false, 10)
 export var white_queen = new piece(3, 7, "queen", "white", 2, true, true, false, 9)
 export var white_bishop_1 = new piece(5, 4, "bishop", "white", 3, true, true, false, 3)
@@ -464,7 +464,7 @@ export var black_pawn_5 = new piece(4, 1, "pawn", "black", 29, true, true, false
 export var black_pawn_6 = new piece(5, 2, "pawn", "black", 30, true, true, false, 1)
 export var black_pawn_7 = new piece(6, 1, "pawn", "black", 31, true, true, false, 1)
 export var black_pawn_8 = new piece(7, 1, "pawn", "black", 32, true, true, false, 1)
-
+*/
 
 
 
@@ -953,10 +953,10 @@ export var black_pawn_6 = new piece(5, 2, "pawn", "black", 30, false, true, fals
 export var black_pawn_7 = new piece(6, 1, "pawn", "black", 31, true, true, false, 1)
 export var black_pawn_8 = new piece(7, 1, "pawn", "black", 32, true, true, false, 1)
 
-export const white_pieces = [white_king, white_queen, white_castle_1, white_castle_2, white_bishop_1, white_bishop_2, white_knight_1, white_knight_2, 
+export const white_pieces = [white_king, white_queen, white_castle_1, white_castle_2, white_bishop_1, white_bishop_2, white_knight_1, white_knight_2,
 white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_4, white_pawn_5, white_pawn_6, white_pawn_7, white_pawn_8]
-    
-export const black_pieces = [black_king, black_queen, black_castle_1, black_castle_2, black_bishop_1, black_bishop_2, black_knight_1, black_knight_2, 
+
+export const black_pieces = [black_king, black_queen, black_castle_1, black_castle_2, black_bishop_1, black_bishop_2, black_knight_1, black_knight_2,
 black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_4, black_pawn_5, black_pawn_6, black_pawn_7, black_pawn_8]
 
 export const all_pieces = white_pieces.concat(black_pieces)
@@ -1046,10 +1046,10 @@ export var black_pawn_8 = new piece(7, 1, "pawn", "black", 32, true, false, fals
 
 
 
-export const white_pieces = [white_king, white_queen, white_castle_1, white_castle_2, white_bishop_1, white_bishop_2, white_knight_1, white_knight_2, 
+export const white_pieces = [white_king, white_queen, white_castle_1, white_castle_2, white_bishop_1, white_bishop_2, white_knight_1, white_knight_2,
 white_pawn_1, white_pawn_2, white_pawn_3, white_pawn_4, white_pawn_5, white_pawn_6, white_pawn_7, white_pawn_8]
-    
-export const black_pieces = [black_king, black_queen, black_castle_1, black_castle_2, black_bishop_1, black_bishop_2, black_knight_1, black_knight_2, 
+
+export const black_pieces = [black_king, black_queen, black_castle_1, black_castle_2, black_bishop_1, black_bishop_2, black_knight_1, black_knight_2,
 black_pawn_1, black_pawn_2, black_pawn_3, black_pawn_4, black_pawn_5, black_pawn_6, black_pawn_7, black_pawn_8]
 
 export const all_pieces = white_pieces.concat(black_pieces)
