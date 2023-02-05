@@ -1,0 +1,1 @@
+web: gunicorn online_chess.wsgi --log-file -
