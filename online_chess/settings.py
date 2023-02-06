@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['gus-chess.herokuapp.com', '127.0.0.1']
 
+CSRF_TRUSTED_ORIGINS = ['https://gus-chess.herokuapp.com','https://*.127.0.0.1']
+
 
 # Application definition
 
